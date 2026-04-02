@@ -27,13 +27,11 @@ The system utilizes **4 IR sensors** and a **Finite State Machine (FSM) using mi
 * **Miscellaneous:** 1 caster wheel for tuk-tuk aesthetic and 2 soldered IR proximity sensors for obstacle detection, not connected to arduino
 
 ### Pin Configuration:
-* |    **Component**     |      Pin       |
-* |    **---------**     |     -----      |
-* | **IR Sensors**       | D2, D3, D4, D5 |
-* | **Motor Driver ENA** | D6             |
-* | **Motor IN1, IN2**   | D7, D8         |
-* | **Motor IN3, IN4**   | D9, D10        |
-* | **Motor Driver ENB** | D11            |
+* **IR Sensors:**  D2, D3, D4, D5
+* **Motor Driver ENA:** D6
+* **Motor IN1, IN2:** D7, D8
+* **Motor IN3, IN4:** D9, D10
+* **Motor Driver ENB:** D11
 
 ---
 
