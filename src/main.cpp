@@ -26,24 +26,6 @@ Section       currentSection = A1_CURVED_WHITE;
 int           lastError      = 0;
 unsigned long sectionTimer   = 0;
 
-SensorState readWhite() {
-  SensorState s;
-  s.fl = ON_WHITE(IR_FL);
-  s.ml = ON_WHITE(IR_ML);
-  s.mr = ON_WHITE(IR_MR);
-  s.fr = ON_WHITE(IR_FR);
-  return s;
-}
-
-SensorState readBlack() {
-  SensorState s;
-  s.fl = ON_BLACK(IR_FL);
-  s.ml = ON_BLACK(IR_ML);
-  s.mr = ON_BLACK(IR_MR);
-  s.fr = ON_BLACK(IR_FR);
-  return s;
-}
-
 int computeError(SensorState s) {
   int pos = 0, cnt = 0;
   if (s.fl) { pos += -3; cnt++; }
