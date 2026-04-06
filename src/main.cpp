@@ -1,28 +1,6 @@
 #include <Arduino.h>
-
-struct SensorState {
-  bool fl, ml, mr, fr;  
-};
-
-
-#define IR_FL   2
-#define IR_ML   3
-#define IR_MR   4
-#define IR_FR   5
-#define ENA     6
-#define IN1     7
-#define IN2     8
-#define IN3     9
-#define IN4    10
-#define ENB    11
-#define ON_WHITE(pin)   (digitalRead(pin) == LOW)
-#define ON_BLACK(pin)   (digitalRead(pin) == HIGH)
-#define SPEED_BASE   200
-#define SPEED_FAST   225
-#define SPEED_TURN   170
-#define SPEED_PIVOT  180
-#define SPEED_SLOW   150
-
+#include "include.h"
+#include "hardware.h"
 
 enum Section {
   WAIT_START,
@@ -47,46 +25,6 @@ enum Section {
 Section       currentSection = A1_CURVED_WHITE;
 int           lastError      = 0;
 unsigned long sectionTimer   = 0;
-
-void setMotors(int leftSpeed, int rightSpeed) {
-  int minPower = 125; // Adjust this until the humming stops!
-
-  // Process Left Motor
-  if (leftSpeed != 0) {
-    bool reverse = (leftSpeed < 0);
-    int power = abs(leftSpeed);
-    if (power < minPower) power = minPower; 
-    digitalWrite(IN1, !reverse ? HIGH : LOW);
-    digitalWrite(IN2, !reverse ? LOW : HIGH);
-    analogWrite(ENA, constrain(power, 0, 255));
-  } else {
-    analogWrite(ENA, 0);
-  }
-  if (rightSpeed != 0) {
-    bool reverse = (rightSpeed < 0);
-    int power = abs(rightSpeed);
-    if (power < minPower) power = minPower;
-
-    digitalWrite(IN3, !reverse ? HIGH : LOW);
-    digitalWrite(IN4, !reverse ? LOW : HIGH);
-    analogWrite(ENB, constrain(power, 0, 255));
-  } else {
-    analogWrite(ENB, 0);
-  }
-}
-
-void stopMotors() {
-  analogWrite(ENA, 0); analogWrite(ENB, 0);
-  digitalWrite(IN1, LOW); digitalWrite(IN2, LOW);
-  digitalWrite(IN3, LOW); digitalWrite(IN4, LOW);
-}
-
-void forward(int spd)    { setMotors(spd, spd); }
-void turnLeft(int spd)   { setMotors(-spd, spd); }
-void turnRight(int spd)  { setMotors(spd, -spd); }
-void curveLeft(int spd)  { setMotors(SPEED_TURN, spd); }
-void curveRight(int spd) { setMotors(spd, SPEED_TURN); }
-
 
 SensorState readWhite() {
   SensorState s;
@@ -124,7 +62,6 @@ void followLine(SensorState s, int baseSpeed) {
             constrain(baseSpeed - correction, 0, 255));
 }
 
-
 void followRightEdge(int spd) {
   if (ON_BLACK(IR_MR)) {
     setMotors(SPEED_TURN, spd);   
@@ -141,13 +78,11 @@ void followLeftEdge(int spd) {
   }
 }
 
-
 bool isJunction(SensorState s) {
   int cnt = (s.fl ? 1 : 0) + (s.ml ? 1 : 0)
           + (s.mr ? 1 : 0) + (s.fr ? 1 : 0);
   return cnt >= 3;
 }
-
 
 void nextSection() {
   currentSection = (Section)((int)currentSection + 1);
@@ -156,7 +91,6 @@ void nextSection() {
   stopMotors();
   delay(100);
 }
-
 
 void setup() {
   pinMode(IR_FL, INPUT); pinMode(IR_ML, INPUT);
@@ -169,7 +103,6 @@ void setup() {
   currentSection = A1_CURVED_WHITE; 
   sectionTimer = millis();
 }
-
 
 void loop() {
 
@@ -191,7 +124,6 @@ void loop() {
       if (isJunction(s) && millis() - sectionTimer > 1000) nextSection();
       break;
     }
-
 
     case B1_BLACK: {
       SensorState s = readBlack();
@@ -237,7 +169,6 @@ void loop() {
       break;
     }
 
-
     case C1_RIGHT_EDGE: {
       followRightEdge(SPEED_BASE);
       SensorState s = readBlack();
@@ -265,7 +196,6 @@ void loop() {
       if (isJunction(s) && millis() - sectionTimer > 3000) nextSection();
       break;
     }
-
 
     case D1_90_BLACK_EDGE: {
       followRightEdge(SPEED_BASE);
