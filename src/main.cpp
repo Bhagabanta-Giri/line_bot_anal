@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "include.h"
 #include "hardware.h"
-
+#include "sensor.h"
 enum Section {
   WAIT_START,
   A1_CURVED_WHITE,
