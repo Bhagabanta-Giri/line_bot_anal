@@ -68,3 +68,15 @@ The robot navigates via a sequential State Machine. Each state is tuned for the 
 * **Sourav Sharma** *B.Tech, Biomedical Engineering* **NIT Rourkela**
 * **Swagat Panda** *B.Tech, Food-process Engineering* **NIT Rourkela**
 * **Ronit Kumar Patra** *B.Tech, Ceramic Engineering* **NIT Rourkela**
+
+## Repository structure
+
+- `.vscode/`
+- `include/`
+- `lib/`
+- `src/`
+- `test/`
+- `Bot Map.jpeg`
+- `README.md`
+- `platformio.ini`
+
